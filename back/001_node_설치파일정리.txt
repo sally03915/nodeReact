@@ -60,17 +60,17 @@ npm i passport  passport-local
 npm i morgan
 ```
 
-11. axios
+■ 11. axios
 ``` bash
 npm install axios
 ```
 
 
-12. mail
+■ 12. mail
 ``` bash
 npm install nodemailer
 ```
 
 
-13. 
+■ 13. chating
 npm install express express-session axios qs
