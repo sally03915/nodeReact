@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import { FOLLOW_REQUEST, UNFOLLOW_REQUEST } from '../reducers/user';
 
-function FollowButton({ post }) {
+function FollowButton({ post }) {   
     const dispatch = useDispatch();
     const { user, followLoading, unfollowLoading } = useSelector((state) => state.user);
     const isFollowing = user?.Followings.find((v) => v.id === post.User.id);  // 팔로잉여부
@@ -12,7 +12,7 @@ function FollowButton({ post }) {
     const onClickButton = useCallback(() => {
         if (isFollowing) {
             dispatch({
-                type: UNFOLLOW_REQUEST,
+                type: UNFOLLOW_REQUEST,  // 이벤트발생
                 data: post.User.id,  // 사용자아이디 넣어줌
             });
         } else {
