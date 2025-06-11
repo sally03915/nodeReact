@@ -1,4 +1,6 @@
 #### ver1. local
+1. node
+2. react
 
 #### ver2. aws1- back/front
 
