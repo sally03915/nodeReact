@@ -18,8 +18,8 @@ const  apiRouter = require('./routes/api');
 //const  chatRouter = require('./routes/server');
 
 //#####
-// const hpp = require('hpp');
-// const helmet = require('helmet');
+const hpp = require('hpp');
+const helmet = require('helmet');
 
 ////2. 환경설정
 dotenv.config();  //환경설정 .env 를 로드
@@ -34,7 +34,6 @@ db.sequelize.sync()
 passportConfig();  //
 
 /////4. 각종사용 연결
-/*
 if (process.env.NODE_ENV === 'production') { //// 배포용
     app.use(morgan('combined'));
     app.use(hpp());
@@ -44,14 +43,12 @@ if (process.env.NODE_ENV === 'production') { //// 배포용
         credentials: true,
     }));
 } else {  //// 개발용
-*/
-app.use(morgan('dev'));  // http요청로그를 기록하여 디버깅과 모니터링
-app.use(cors({
-    origin: 'http://localhost:3000',  // 요청허용
-    credentials: true,  // 쿠키와 같은 인증정보르 포함한 요청도 허용
-}));
-
-/*} */
+    app.use(morgan('dev'));  // http요청로그를 기록하여 디버깅과 모니터링
+    app.use(cors({
+        origin: 'http://localhost:3000',  // 요청허용
+        credentials: true,  // 쿠키와 같은 인증정보르 포함한 요청도 허용
+    }));
+}  
 
 
 app.use('/', express.static(path.join(__dirname, 'uploads')));   // uploads 디렉토리의 파일을  액세스할수 있게
@@ -95,6 +92,6 @@ app.use('/api', apiRouter);
 //app.use('/chat', chatRouter); 
 
 ////6. 서버설정 및 실행
-app.listen(3065, () => {
+app.listen(80, () => {
     console.log('서버 실행 중!');
 });
