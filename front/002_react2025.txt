@@ -371,20 +371,37 @@ ___________________________________________________________________
 ■5. etc - 스크롤링, faker dummy ,,,,,
 
 
-1. 점검 : eslint
-```bash
-```
 
-2. 아이디 안겹치게 shortid
-```bash
-```
+1.  eslint 점검설치
+npm i -D babel-eslint@10.1.0  eslint-config-airbnb@18.1.0  eslint-plugin-import@2.20.2
+npm i -D eslint-plugin-react-hooks@4.0.4
+npm install eslint-plugin-react-hooks@2.5.0
 
-3. 여러줄 코드 줄이기 -  immer
-```bash
-```
+npm i -D eslint-plugin-jsx-a11y@6.2.3 --legacy-peer-deps
+
+
+--legacy-peer-deps 의존성 무시하고 설치 진행
+
+
+2.  코드 여러줄 불변성인 코드 줄이기 - immer 설치
+npm i immer@9.0.19   --legacy-peer-deps
+
+
+3. 아이디 안 겹치게
+npm i shortid@2.2.15  --legacy-peer-deps
 
 4. faker
 
+https://www.npmjs.com/package/@faker-js/faker
 
+```python
+npm install --save-dev @faker-js/faker  --legacy-peer-deps
+```
+
+```python
+"@faker-js/faker": "^9.6.0",
+```
+
+npx @next/codemod new-link . --force
 
 
