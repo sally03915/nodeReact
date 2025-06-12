@@ -14,7 +14,7 @@ const hashtagRouter = require('./routes/hashtag');  // 라우터 연결
 const db = require('./models');
 const passportConfig = require('./passport');
 
-const  apiRouter = require('./routes/api');
+const apiRouter = require('./routes/api');
 //const  chatRouter = require('./routes/server');
 
 //#####
@@ -39,7 +39,8 @@ if (process.env.NODE_ENV === 'production') { //// 배포용
     app.use(hpp());
     app.use(helmet({ contentSecurityPolicy: false }));
     app.use(cors({
-        origin: 'http://d2bing.com',
+        //origin: 'http://d2big.com',
+        origin: 'http://54.180.24.191',
         credentials: true,
     }));
 } else {  //// 개발용
@@ -48,7 +49,7 @@ if (process.env.NODE_ENV === 'production') { //// 배포용
         origin: 'http://localhost:3000',  // 요청허용
         credentials: true,  // 쿠키와 같은 인증정보르 포함한 요청도 허용
     }));
-}  
+}
 
 
 app.use('/', express.static(path.join(__dirname, 'uploads')));   // uploads 디렉토리의 파일을  액세스할수 있게
@@ -65,7 +66,7 @@ if (process.env.NODE_ENV === 'production') { //// 배포용
         cookie: {
             httpOnly: true,
             secure: false,
-            domain: process.env.NODE_ENV === 'production' && '.d2big.com'
+            domain: process.env.NODE_ENV === 'production' && '54.180.24.191' //'.d2big.com'
         },
     }));
 } else {
@@ -88,8 +89,8 @@ app.use('/posts', postsRouter);
 app.use('/post', postRouter);
 app.use('/user', userRouter);
 app.use('/hashtag', hashtagRouter); //##
-app.use('/api', apiRouter); 
-//app.use('/chat', chatRouter); 
+app.use('/api', apiRouter);
+//app.use('/chat', chatRouter);
 
 ////6. 서버설정 및 실행
 app.listen(80, () => {
