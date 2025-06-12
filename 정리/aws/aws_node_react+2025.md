@@ -371,12 +371,12 @@ sudo ufw status
 sudo npm i pm2  cross-env  helmet hpp
 ```
 
-※ 파일 수정 후  git 에서 다운로드
+※ 파일 수정 후 git 에서 다운로드
+
 ```bash
-back 위치에서 
+back 위치에서
 git pull origin main
 ```
-
 
 [실행]
 
@@ -512,12 +512,24 @@ sudo  apt-get  install  curl
 sudo  apt-get  install nodejs  -y
 sudo  apt-get  install npm
 
-sudo npm install --legacy-peer-deps
-sudo npm i next@13.4.13 --legacy-peer-deps
+sudo npm install          --legacy-peer-deps
+sudo npm i next@13.4.13   --legacy-peer-deps
 
 node -v
 npm  -v
 
+```
+
+메모리 확보
+스왑 메모리(Swap Memory)는 컴퓨터의 RAM이 부족할 때 하드디스크(HDD) 또는 SSD의 일부 공간을 가상 메모리로 사용하는 기능입니다. 즉, 물리적 메모리가 부족할 때 임시 저장 공간으로 활용하는 방법
+
+```bash
+sudo fallocate -l 2G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+sudo swapon --show
+sudo free -h
 ```
 
  <div>
@@ -641,9 +653,12 @@ export default wrapper;
 
 ```
 
+🚀 일반적인 Next.js 프로젝트 (50~100 페이지) → 1~5분
+⚡ 대형 프로젝트 (1000+ 페이지, 복잡한 이미지 최적화 포함) → 5~15분 이상
+
 ※ 참고 - 파일 수정 후 다시 받을때
 
-```bash 
+```bash
 git pull origin main
 ```
 
@@ -653,7 +668,7 @@ git pull origin main
 5.  [aws] - [front]
 
 ```bash
-npm i pm2
+npm install pm2 --legacy-peer-deps
 npx pm2 start  npm  -- start
 ```
 
