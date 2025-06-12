@@ -4,8 +4,19 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 module.exports = withBundleAnalyzer({
   compress: true,
-  webpack(config, { webpack }) {
+  swcMinify: true, // SWC를 활성화하여 빌드 최적화
+  eslint: {
+    ignoreDuringBuilds: true, // 빌드 시 ESLint 오류 무시
+  },
+  webpack(config, { webpack, isServer }) {
     const prod = process.env.NODE_ENV === 'production';
+
+    if (!isServer) {
+      config.resolve.fallback = {
+        fs: false,
+      };
+    }
+
     return {
       ...config,
       mode: prod ? 'production' : 'development',

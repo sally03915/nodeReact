@@ -76,14 +76,23 @@ npm i axios
 
 
 ■8.  eslint 점검설치
-npm i -D babel-eslint@10.1.0  eslint-config-airbnb@18.1.0  eslint-plugin-import@2.20.2
-npm i -D eslint-plugin-react-hooks@4.0.4
-npm install eslint-plugin-react-hooks@2.5.0
-
+> 기존버젼
+npm i -D babel-eslint@10.1.0  eslint-config-airbnb@18.1.0  eslint-plugin-import@2.20.2  --legacy-peer-deps
+npm i -D eslint-plugin-react-hooks@4.0.4   --legacy-peer-deps
 npm i -D eslint-plugin-jsx-a11y@6.2.3 --legacy-peer-deps
 
 
 --legacy-peer-deps 의존성 무시하고 설치 진행
+> 지우고
+npm uninstall babel-eslint eslint-config-airbnb eslint-plugin-import eslint-plugin-react-hooks eslint-plugin-jsx-a11y
+
+> 버젼수정하고 다시 설치
+npm install --save-dev eslint@8
+npm install --save-dev @babel/eslint-parser eslint-config-airbnb eslint-plugin-import eslint-plugin-react-hooks eslint-plugin-jsx-a11y  --legacy-peer-deps
+
+
+
+
 
 
 ■9.  코드 여러줄 불변성인 코드 줄이기 - immer 설치
