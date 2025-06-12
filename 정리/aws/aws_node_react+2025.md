@@ -659,7 +659,8 @@ export default wrapper;
 ※ 참고 - 파일 수정 후 다시 받을때
 
 ```bash
-git pull origin main
+git pull    origin main
+git reset --hard origin/main     // 강제적용
 ```
 
 <br/>
@@ -668,8 +669,8 @@ git pull origin main
 5.  [aws] - [front]
 
 ```bash
-npm install pm2 --legacy-peer-deps
-npx pm2 start  npm  -- start
+sudo npm install pm2 --legacy-peer-deps
+sudo npx pm2 start  npm  -- start
 ```
 
 6. 탄력적ip
