@@ -5,9 +5,9 @@
   "license": "ISC",
   "main": "index.js",
   "scripts": {
-    "dev": "next -p 3000",
+    "dev": "next -p 80",
     "build": "cross-env ANALYZE=false NODE_ENV=production next build",
-    "start": "cross-env NODE_ENV=production next start -p 3000"
+    "start": "cross-env NODE_ENV=production next start -p 80"
   },
   "author": "sally03915",
   "dependencies": {
