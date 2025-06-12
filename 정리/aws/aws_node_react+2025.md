@@ -371,6 +371,13 @@ sudo ufw status
 sudo npm i pm2  cross-env  helmet hpp
 ```
 
+※ 파일 수정 후  git 에서 다운로드
+```bash
+back 위치에서 
+git pull origin main
+```
+
+
 [실행]
 
 ```bash
@@ -505,8 +512,8 @@ sudo  apt-get  install  curl
 sudo  apt-get  install nodejs  -y
 sudo  apt-get  install npm
 
-npm install --legacy-peer-deps
-npm i next@13.4.13 --legacy-peer-deps
+sudo npm install --legacy-peer-deps
+sudo npm i next@13.4.13 --legacy-peer-deps
 
 node -v
 npm  -v
@@ -542,7 +549,7 @@ npm run build
 
 ※ 참고 - 파일 수정 후 다시 받을때
 
-```bash
+```bash 
 git pull origin main
 ```
 
