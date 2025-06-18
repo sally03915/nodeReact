@@ -33,6 +33,7 @@ passportConfig();  //
 /////4. 각종사용 연결
 
 if (process.env.NODE_ENV === 'production') { //// 배포용
+    app.set('trust proxy', 1);  //##
     app.use(morgan('combined'));
     app.use(hpp());
     app.use(helmet({ contentSecurityPolicy: false }));
@@ -63,12 +64,15 @@ app.use(session({
     saveUninitialized: false,  // 초기화되지 않은 세션은 저장하지 않음.
     resave: false,  // 세션이 변경되지 않았다면 저장하지 않음.
     secret: process.env.COOKIE_SECRET,  // 세션데이털르 암호화하기위한 비밀키
+    proxy: true, //##
     cookie: {
         httpOnly: true,
-        secure: false,
+        secure: true,  //##
         domain: process.env.NODE_ENV === 'production' && '.d2big.com'  //'13.209.81.237'   http://nodebird.com
     },
 }));
+
+
 /*
 } else {
 app.use(session({
