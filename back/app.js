@@ -37,15 +37,15 @@ if (process.env.NODE_ENV === 'production') { //// 배포용
     app.use(hpp());
     app.use(helmet({ contentSecurityPolicy: false }));
     app.use(cors({
-        origin: 'http://d2bing.com',
+        //origin: 'http://d2bing.com',
+        origin: 'http://13.209.81.237',  // 요청허용
         credentials: true,
     }));
 } else {  //// 개발용
 
     app.use(morgan('dev'));  // http요청로그를 기록하여 디버깅과 모니터링
     app.use(cors({
-        //origin: 'http://localhost:3000',  // 요청허용
-        origin: 'http://54.180.162.13',  // 요청허용
+        origin: 'http://localhost:3000',  // 요청허용
         credentials: true,  // 쿠키와 같은 인증정보르 포함한 요청도 허용
     }));
 
@@ -66,7 +66,7 @@ app.use(session({
     cookie: {
         httpOnly: true,
         secure: false,
-        domain: process.env.NODE_ENV === 'production' && '54.180.162.13'  //'.d2big.com'
+        domain: process.env.NODE_ENV === 'production' && '13.209.81.237'  //'.d2big.com'
     },
 }));
 /*
