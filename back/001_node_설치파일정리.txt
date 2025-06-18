@@ -9,12 +9,12 @@ npm init
 ```bash
 npm install express
 ```
- 
+
 node  app.js
 
 
 ■3. sequelize , sequelize-cli 설치
-```bash 
+```bash
 npm  i  sequelize   sequelize-cli   mysql2
 ```
 
@@ -25,22 +25,22 @@ npx sequelize init
 
 
 ■4.  비밀번호 암호화 설치
-```bash 
+```bash
 npm i bcrypt
 ```
 
 ■ 5. CORS
-```bash 
+```bash
 npm i cors
 ```
 
 ■ 6. passport
-```bash 
+```bash
 npm i passport  passport-local
 ```
 
 ■ 7. 세션설치
-```bash  
+```bash
   npm i express-session cookie-parser
 ```
 
@@ -59,3 +59,7 @@ npm i passport  passport-local
 ```bash
 npm i morgan
 ```
+
+
+■ 11.
+npm i pm2  cross-env  helmet hpp

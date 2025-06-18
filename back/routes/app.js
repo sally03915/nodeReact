@@ -33,7 +33,7 @@ if (process.env.NODE_ENV === 'production') { //// 배포용
     app.use(helmet({ contentSecurityPolicy: false }));
     app.use(cors({
         //origin: 'http://d2big.com',    front
-        origin: 'http://43.201.50.142',
+        origin: 'http://13.209.81.237',
         credentials: true,
     }));   ///배포된 프론트엔드 서버의 주소  3.36.100.83
 
@@ -55,7 +55,7 @@ app.use(session({
     cookie: {
         httpOnly: true,
         secure: false,
-        domain: process.env.NODE_ENV === 'production' && '54.180.120.234' //'.d2big.com'   back
+        domain: process.env.NODE_ENV === 'production' && '13.209.81.237' //'.d2big.com'   back
     },    ///배포된  서버의 주소  54.180.24.191   -   백엔드 서버가 위치한 실제 도메인
 }));
 app.use(passport.initialize());
