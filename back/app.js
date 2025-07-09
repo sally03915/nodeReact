@@ -38,8 +38,8 @@ if (process.env.NODE_ENV === 'production') { //// 배포용
     app.use(hpp());
     app.use(helmet({ contentSecurityPolicy: false }));
     app.use(cors({
-        origin: 'http://d2big.com',
-        //origin: 'http://13.209.81.237',  // 요청허용
+       // origin: 'http://d2big.com',
+        origin: 'http://54.180.24.50',  // 요청허용
         credentials: true,
     }));
 } else {  //// 개발용
@@ -66,8 +66,8 @@ if (process.env.NODE_ENV === 'production') { //// 배포용
         proxy: true, //##
         cookie: {
             httpOnly: true,
-            secure: true,  //##
-            domain: process.env.NODE_ENV === 'production' && '.d2big.com'  //'13.209.81.237'   http://nodebird.com
+           // secure: true,  //##
+           // domain: process.env.NODE_ENV === 'production' && '.d2big.com'  //'13.209.81.237'   http://nodebird.com
         },
     }));
 
@@ -93,6 +93,6 @@ app.use('/user', userRouter);
 app.use('/hashtag', hashtagRouter); //##
 
 ////6. 서버설정 및 실행
-app.listen(3065, () => {
+app.listen(80, () => {
     console.log('서버 실행 중!');
 });
