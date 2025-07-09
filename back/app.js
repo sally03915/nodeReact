@@ -67,7 +67,7 @@ if (process.env.NODE_ENV === 'production') { //// 배포용
         cookie: {
             httpOnly: true,
            // secure: true,  //##
-           // domain: process.env.NODE_ENV === 'production' && '.d2big.com'  //'13.209.81.237'   http://nodebird.com
+           // domain: process.env.NODE_ENV === 'production' && '.d2big.com'  
         },
     }));
 
