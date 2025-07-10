@@ -66,6 +66,7 @@ if (process.env.NODE_ENV === 'production') { //// 배포용
         proxy: true, //##
         cookie: {
             httpOnly: true,
+            secure: false,
            // secure: true,  //##
            // domain: process.env.NODE_ENV === 'production' && '.d2big.com'  
         },
