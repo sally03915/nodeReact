@@ -1,0 +1,415 @@
+### NODE + REACT AWS  ( EC2 - 1개 VER  :  node 3065 / react 3000 )
+---
+
+##### 1. [back] 코드수정 - app.js 코드수정
+
+**[full source]**
+
+```bash
+////1. require
+const express = require('express');  // express 프레임워크를 사용해 서버 생성
+const cors = require('cors');  // CORS(Cross-Origin Resource Sharing)를 설정하여 다른 도메인에서의 API 요청을 허용
+const session = require('express-session');
+const cookieParser = require('cookie-parser'); //쿠키와 세션을 관리하여 사용자의 인증 및 상태를 유지
+const passport = require('passport');  //쿠키와 세션을 관리하여 사용자의 인증 및 상태를 유지
+const dotenv = require('dotenv');  // 환경변수 .env 를 로드하여 민감한 데이터를 보호함.
+const morgan = require('morgan');  // 브라우저 로그인 처리
+const path = require('path');
+const postRouter = require('./routes/post');
+const postsRouter = require('./routes/posts');
+const userRouter = require('./routes/user');
+const hashtagRouter = require('./routes/hashtag');  // 라우터 연결
+const db = require('./models');
+const passportConfig = require('./passport');
+
+//#####
+const hpp = require('hpp');
+const helmet = require('helmet');
+
+////2. 환경설정
+dotenv.config();  //환경설정 .env 를 로드
+const app = express();
+
+////3. 데이터베이스 연결
+db.sequelize.sync()
+    .then(() => {
+        console.log('db 연결 성공');
+    })
+    .catch(console.error);
+passportConfig();  //
+
+/////4. 각종사용 연결
+
+if (process.env.NODE_ENV === 'production') { //// 배포용
+    app.set('trust proxy', 1);  //##
+    app.use(morgan('combined'));
+    app.use(hpp());
+    app.use(helmet({ contentSecurityPolicy: false }));
+    app.use(cors({
+        //origin: 'http://d2big.com',
+        origin: 'http://13.209.81.237',  // 요청허용  ###########
+        credentials: true,
+    }));
+} else {  //// 개발용
+    app.use(morgan('dev'));  // http요청로그를 기록하여 디버깅과 모니터링
+    app.use(cors({
+        origin: 'http://localhost:3000',  // 요청허용
+        credentials: true,  // 쿠키와 같은 인증정보르 포함한 요청도 허용
+    }));
+
+}
+
+app.use('/images', express.static(path.join(__dirname, 'uploads')));   // uploads 디렉토리의 파일을  액세스할수 있게
+app.use(express.json());  // 요청본문을 파싱하는 미들웨어 - 클라이언트로부터 json 데이터를 받을 때 사용됨.
+app.use(express.urlencoded({ extended: true }));  // url 요청본문을 파싱함.
+app.use(cookieParser(process.env.COOKIE_SECRET)); // 쿠키를 파싱하는 미들웨어
+// 세션관리를 위한 미들웨어
+
+if (process.env.NODE_ENV === 'production') { //// 배포용
+    app.use(session({
+        saveUninitialized: false,  // 초기화되지 않은 세션은 저장하지 않음.
+        resave: false,  // 세션이 변경되지 않았다면 저장하지 않음.
+        secret: process.env.COOKIE_SECRET,  // 세션데이털르 암호화하기위한 비밀키
+        proxy: true, //##
+        cookie: {
+            httpOnly: true,
+            secure:false
+           // secure: true,  //##
+           // domain: process.env.NODE_ENV === 'production' && '.d2big.com'
+        },
+    }));
+
+} else {
+    app.use(session({
+        saveUninitialized: false,  // 초기화되지 않은 세션은 저장하지 않음.
+        resave: false,  // 세션이 변경되지 않았다면 저장하지 않음.
+        secret: process.env.COOKIE_SECRET,  // 세션데이털르 암호화하기위한 비밀키
+        cookie: { secure: false } // production에서는 true로 설정
+    }));
+}
+app.use(passport.initialize());  // passport 를 초기화하는 미들웨어 , passport는 인증을 처리하는 라이브러리
+app.use(passport.session()); // 사용자의 인증상태를 세션에 저장하고 요청간에 유지
+
+app.get('/', (req, res) => {
+    res.send('hello express');
+});
+// API는 다른 서비스가 내 서비스의 기능을 실행할 수 있게 열어둔 창구
+////5. 라우팅 - 요청을 처리하는 라우터를 연결
+app.use('/posts', postsRouter);
+app.use('/post', postRouter);
+app.use('/user', userRouter);
+app.use('/hashtag', hashtagRouter); //##
+
+////6. 서버설정 및 실행
+app.listen(3065, () => {
+    console.log('서버 실행 중!');
+});
+
+```
+
+##### 2. [BACK] ssh를 이용하여 연결하여 git파일다운로드
+
+```bash
+1. [vs code] - ssh로 접속
+ssh -i "back.pem" ubuntu@ec2-43-201-96-81.ap-northeast-2.compute.amazonaws.com
+  yes
+
+2. github에서 clone
+git clone https://github.com/sally03915/nodeReact.git
+ls
+```
+
+```bash
+sudo fallocate -l 8G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+sudo swapon --show
+sudo free -h
+```
+
+##### 3. 노드설치
+
+1. 노드 설치하기
+
+```bash
+   cd back    //back 있는 경로로 이동
+   sudo apt-get update
+   sudo apt-get install -y build-essential     // 어떤옵션이 나오면 -   Tab 키를 눌러 <Ok> 버튼으로 이동
+   sudo apt-get install curl
+   sudo apt-get install nodejs -y
+
+```
+
+##### 4. mysql 설치하기
+
+```bash
+   1. 설치할수 있는 mysql버젼
+      sudo apt-cache search mysql-server
+   2. apt 업데이트
+      sudo apt-get update
+   3. mysql설치 - mysql-server8.0
+      sudo apt-get install mysql-server-8.0
+   4. mysql접속
+      /etc/init.d/mysql status
+      sudo mysql -uroot 비번없음
+   5. 인증확인
+      select user, host, plugin from mysql.user;
+   6. 인증업데이트
+      use mysql
+      UPDATE user SET plugin='caching_sha2_password' WHERE user='root';
+      flush privileges;
+   7. 비번바꾸기
+      SET password for 'root'@'localhost'='1234';
+   8. 확인
+      mysql -uroot -p
+      1234
+   9. db만들기
+      create database node_react;
+```
+
+##### 5. npx sequelize db:create
+
+```bash
+sudo apt install npm   // 잘 설치가 안되었다면
+sudo npm i
+sudo npx sequelize db:create
+```
+
+```bash
+- mysql 에 접속후 show tables 해서 테이블명 확인할 것.
+```
+
+mysql> use node_react
+Database changed
+mysql>
+mysql>
+mysql> show tables;
++----------------------+
+| Tables_in_node_react |
++----------------------+
+| Follow |
+| Like |
+| Posthashtag |
+| comments |
+| hashtags |
+| images |
+| posts |
+| users |
++----------------------+
+8 rows in set (0.00 sec)
+
+##### 6. pm2
+
+- 실행은 나중에 할것.
+
+```bash
+sudo npm i pm2  cross-env  helmet hpp
+```
+
+<br/>
+<br/>
+
+##### 7. public ip로 접속해보기
+
+1.  탄력적 ip 설정
+2.  public ip로 접속
+
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+
+---
+
+#### ■ PART002. EC2 올리기 - FRONT
+
+##### 1. 코드변경
+
+1. [front]- [config]-config.js
+
+- back public ip로 변경
+
+```
+process.env.NODE_ENV === 'production' ? 'http://43.201.96.81' : 'http://localhost:3065';
+```
+
+                                        #########
+
+> ㅁ추후 domain 연결후
+
+```
+process.env.NODE_ENV === 'production' ? 'https://d2big.com' : 'http://localhost:3065';
+```
+
+<br/>
+<br/>
+
+2. [front]- [sagas]- index.js
+
+```
+axios.defaults.baseURL = backUrl;
+axios.defaults.withCredentials = true;
+```
+
+<br/>
+<br/>
+
+3. [front] - package.json
+
+```bash
+"dev": "next -p 3000",
+"build": "cross-env ANALYZE=false NODE_ENV=production next build",
+"start": "cross-env NODE_ENV=production next start -p 3000"
+```
+
+※ 참고 - 파일 수정 후 다시 받을때
+
+```bash
+git pull    origin main
+git reset --hard origin/main     // 강제적용
+```
+
+##### 2. [FRONT] 노드 설치하기
+
+```bash
+sudo  apt-get  update
+sudo  apt-get  install  -y  build-essential
+sudo  apt-get  install  curl
+sudo  apt-get  install nodejs  -y
+sudo  apt-get  install npm
+
+node -v
+npm  -v
+
+sudo npm install          --legacy-peer-deps
+```
+
+##### 3. build
+
+```bash
+sudo npm install react-is
+```
+
+```bash
+sudo npm run build
+```
+
+🚀 일반적인 Next.js 프로젝트 (50~100 페이지) → 1~5분
+⚡ 대형 프로젝트 (1000+ 페이지, 복잡한 이미지 최적화 포함) → 5~15분 이상
+
+※ 참고 - 파일 수정 후 다시 받을때
+
+```bash
+git pull    origin main
+git reset --hard origin/main     // 강제적용
+```
+
+##### 4. pm2
+
+```bash
+sudo npm install pm2 --legacy-peer-deps
+```
+
+<br/>
+<br/>
+<br/>
+
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+
+---
+
+#### ■ PART003. nginx
+
+##### 1. nginx ?
+
+```bash
+sudo su
+sudo lsof -i tcp:80
+(나오는 값이 없어야 함, 나온다면 sudo kill -9 프로세스아이디(PID))
+```
+
+```bash
+sudo apt-get install -y nginx
+```
+
+```bash
+sudo rm /etc/nginx/sites-available/default
+sudo rm /etc/nginx/sites-enabled/default
+```
+
+```bash
+cd /etc/nginx/sites-available
+sudo vi proxy.conf
+```
+
+```bash
+server {
+    listen 80;
+
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Cookie $http_cookie;
+    }
+
+    location ~ ^/(user|post|posts|hashtag|images) {
+        proxy_pass http://localhost:3065;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Cookie $http_cookie;
+    }
+}
+```
+
+~ 정규표현식을 사용하겠다는 의미입니다 (^ 같은 패턴이 들어갈 때 필요)
+^/() 요청 URL이 /로 시작하고 안의 내용(posts 등)과 일치하는지 확인
+
+```bash
+sudo ln -s /etc/nginx/sites-available/proxy.conf /etc/nginx/sites-enabled/proxy.conf
+```
+
+```bash
+sudo nginx -t
+
+```
+
+```bash
+sudo service nginx restart
+```
+
+##### 2.
+
+```bash
+sudo npm start && sudo npx pm2
+
+npx pm2 logs
+npx pm2 kill
+sudo npx pm2 list
+sudo npx pm2 reload all
+sudo npx pm2 stop app
+
+sudo lsof -i tcp:3065
+sudo lsof -i tcp:80
+```
+
+```bash
+sudo chown ubuntu:ubuntu uploads
+sudo chmod 755 uploads
+```
