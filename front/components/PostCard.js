@@ -121,8 +121,8 @@ const PostCard = ({ post }) => {
       objectType: "text",
       text: "이 링크를 확인해보세요!",
       link: {
-        mobileWebUrl: `http://localhost:3000/post/${postId}`,
-        webUrl: `http://localhost:3000/post/${postId}`,
+        mobileWebUrl: `/post/${postId}`,
+        webUrl: `/post/${postId}`,
       },
     });
   };

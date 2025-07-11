@@ -48,8 +48,8 @@ const User = () => {
           <meta name="description" content={`${userInfo.nickname}님의 게시글`} />
           <meta property="og:title" content={`${userInfo.nickname}님의 게시글`} />
           <meta property="og:description" content={`${userInfo.nickname}님의 게시글`} />
-          <meta property="og:image" content="https://d2big.com/favicon.ico" />
-          <meta property="og:url" content={`https://d2big.com/user/${id}`} />
+          <meta property="og:image" content="http://15.164.170.2/favicon.ico" />
+          <meta property="og:url" content={`http://15.164.170.2/user/${id}`} />
         </Head>
       )}
       {userInfo && (userInfo.id !== user?.id)
