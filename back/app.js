@@ -38,8 +38,8 @@ if (process.env.NODE_ENV === 'production') { //// 배포용
     app.use(hpp());
     app.use(helmet({ contentSecurityPolicy: false }));
     app.use(cors({
-       // origin: 'http://d2big.com',
-        origin: 'http://43.201.25.159',  // 요청허용
+        // origin: 'http://d2big.com',
+        origin: 'http://15.164.170.2',  // 요청허용
         credentials: true,
     }));
 } else {  //// 개발용
@@ -52,9 +52,7 @@ if (process.env.NODE_ENV === 'production') { //// 배포용
 }
 
 //////////////////////////////////////////////////////////////////
-app.use('/', express.static(path.join(__dirname, 'uploads')));   // uploads 디렉토리의 파일을  액세스할수 있게
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+app.use('/images', express.static(path.join(__dirname, 'uploads')));   // uploads 디렉토리의 파일을  액세스할수 있게
 //////////////////////////////////////////////////////////////////
 
 app.use(express.json());  // 요청본문을 파싱하는 미들웨어 - 클라이언트로부터 json 데이터를 받을 때 사용됨.
@@ -71,7 +69,7 @@ if (process.env.NODE_ENV === 'production') { //// 배포용
         cookie: {
             httpOnly: true,
             secure: false,  //##
-           // domain: process.env.NODE_ENV === 'production' && '.d2big.com'
+            // domain: process.env.NODE_ENV === 'production' && '.d2big.com'
         },
     }));
 
