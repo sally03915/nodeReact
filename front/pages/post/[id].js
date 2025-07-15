@@ -28,8 +28,8 @@ const Post = () => {
         <meta name="description" content={singlePost.content} />
         <meta property="og:title" content={`${singlePost.User.nickname}님의 게시글`} />
         <meta property="og:description" content={singlePost.content} />
-        <meta property="og:image" content={singlePost.Images[0] ? singlePost.Images[0].src : 'https://d2big.com/favicon.ico'} />
-        <meta property="og:url" content={`https://d2big.com/post/${id}`} />
+        <meta property="og:image" content={singlePost.Images[0] ? singlePost.Images[0].src : 'http://15.164.170.2/favicon.ico'} />
+        <meta property="og:url" content={`http://15.164.170.2/post/${id}`} />
       </Head>
       <PostCard post={singlePost} />
     </AppLayout>
