@@ -11,37 +11,12 @@ const router = express.Router()
 
 
 ///1. 업로드 설정
-/////////////////////////////////////////////////////////////
-// const multerS3 = require('multer-s3');
-// const AWS = require('aws-sdk');
-/////////////////////////////////////////////////////////////
-try {
-    fs.accessSync('uploads') // 폴더 존재여부 확인
-} catch (error) {
-    console.log('uploads 폴더가 없으므로 생성합니다.')
-    fs.mkdirSync('uploads') // 폴더만들기
-}
+/////////////////////////////////////////////////////////////       
+const multerS3 = require('multer-s3');
+const AWS = require('aws-sdk');
+/////////////////////////////////////////////////////////////       
+ 
 
-const upload = multer({
-    // upload  미들웨어 생성
-    storage: multer.diskStorage({
-        //storage- Multer의 저장소 설정으로, 업로드된 파일의 저장 위치와 파일 이름을 지정하는 역할
-        //multer.diskStorage -  파일을 디스크(로컬 파일 시스템)에 저장하도록 설정
-        destination(req, file, done) {
-            // 업로드된 파일이 저장될 경로를 지정
-            done(null, 'uploads')  // 콜백
-        },
-        filename(req, file, done) { // 업로드된 파일의 이름을 지정
-            // upload1.png
-            const ext = path.extname(file.originalname) // 확장자 추출(.png)
-            const basename = path.basename(file.originalname, ext) // upload1
-            done(null, basename + '_' + new Date().getTime() + ext) // upload1_15184712891.png
-        },
-    }),
-    limits: { fileSize: 20 * 1024 * 1024 }, // 20MB
-})
-
-/*
 AWS.config.update({
   accessKeyId: process.env.S3_ACCESS_KEY_ID,
   secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
@@ -50,7 +25,7 @@ AWS.config.update({
 const upload = multer({
   storage: multerS3({
     s3: new AWS.S3(),
-    bucket: 'node-react-sally03915',
+    bucket: 'sally03915',
     key(req, file, cb) {
       cb(null, `original/${Date.now()}_${path.basename(file.originalname)}`)
     }
@@ -58,7 +33,7 @@ const upload = multer({
   limits: { fileSize: 20 * 1024 * 1024 }, // 20MB
 });
 
-*/
+
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
@@ -87,7 +62,7 @@ router.post('/', isLoggedIn, upload.none(), async (req, res, next) => {
         })
 
         //  추출된 해시태그가 존재하면
-        // findOrCreate를 통해 데이터베이스에서 해당 해시태그를 생성하거나 기존에 있는지 확인
+        // findOrCreate를 통해 데이터베이스에서 해당 해시태그를 생성하거나 기존에 있는지 확인       
         if (hashtags) {
             const result = await Promise.all(
                 hashtags.map((tag) =>
@@ -152,7 +127,7 @@ router.post('/', isLoggedIn, upload.none(), async (req, res, next) => {
 router.post('/images', isLoggedIn, upload.array('image'), (req, res, next) => {
     // POST /post/images
     console.log(req.files)  // 업로드된 파일은 업로드된 파일들은 req.files에 저장
-    res.json(req.files.map((v) => v.filename))
+    res.json(req.files.map((v) => v.location))
 })
 
 /////////////////////////////////////////////////////////////
@@ -379,7 +354,6 @@ router.patch('/:postId', isLoggedIn, async (req, res, next) => { // PATCH /post/
         const post = await Post.findOne({ where: { id: req.params.postId } });
         if (hashtags) {
             const result = await Promise.all(hashtags.map((tag) => Hashtag.findOrCreate({
-                where: { name: tag.slice(1).toLowerCase() },
             }))); // [[노드, true], [리액트, true]]
             await post.setHashtags(result.map((v) => v[0]));
         }
@@ -463,4 +437,4 @@ router.get('/:postId', async (req, res, next) => { // GET /post/1
     }
 });
 
-module.exports = router
+module.exports = router~
